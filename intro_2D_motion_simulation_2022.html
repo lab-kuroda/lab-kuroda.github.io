@@ -1,0 +1,1712 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-11-24 木 16:40 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2次元版 生き物の数理モデリングとシミュレーション入門</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="kuroda" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="css/readtheorg.css"/>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.stickytableheaders.js"></script>
+<script type="text/javascript" src="js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2次元版 生き物の数理モデリングとシミュレーション入門</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org5815f74">はじめに</a>
+<ul>
+<li><a href="#org4b0c93e">2次元版では、ベクトルなしでは始まらない</a></li>
+<li><a href="#org47e7986">少し準備</a>
+<ul>
+<li><a href="#org65c6142">物理座標とピクセル座標</a></li>
+<li><a href="#org40826d0">壁の処理</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org1960060">vStep.1 床に置かれたブロックの動き（摩擦なし）</a>
+<ul>
+<li><a href="#orgfc56c96">運動方程式</a></li>
+<li><a href="#orgcf72ad7">シミュレーションのための準備</a>
+<ul>
+<li><a href="#org1bcd82d">時間の離散化</a></li>
+<li><a href="#org09fbeaa">微分方程式の離散化</a></li>
+</ul>
+</li>
+<li><a href="#orgfe91c86">vStep.1</a>
+<ul>
+<li><a href="#orgdb92593">vStep.1-1 (ベクトルのクラスを使わないバージョン)</a></li>
+</ul>
+</li>
+<li><a href="#orge7403b5">vStep.1-2 (ベクトルのクラスを使うバージョン)</a></li>
+</ul>
+</li>
+<li><a href="#orgcf0553b">vStep.2 摩擦（まさつ）の導入</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org8c04d82">vStep.2のプログラム</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org2fb1170">vStep.3 二つのブロックをバネでつなぐ</a>
+<ul>
+<li><a href="#orge1c394f">バネがブロックに及ぼす力</a></li>
+<li><a href="#org2419f3c">vStep3のプログラム</a></li>
+</ul>
+</li>
+<li><a href="#org9ab2a1c">Step.4 バネの自然長を周期的に変化させる : 筋肉の周期的な力の発生の模倣</a>
+<ul>
+<li><a href="#orgdbc2d6a">二つのブロックの距離が一定でも，バネの自然長が変われば力が変化する.</a></li>
+<li><a href="#orgdaf3334">バネの自然長を周期的に変化させる.</a></li>
+<li><a href="#org0ad5e5f">vStep4のプログラム</a></li>
+</ul>
+</li>
+<li><a href="#orgb3f593e">vStep.4a 少し改良</a>
+<ul>
+<li><a href="#orgaf2b122">Step4 からの変更点</a></li>
+</ul>
+</li>
+<li><a href="#org975177f">vStep.5 摩擦に異方性を導入する.</a>
+<ul>
+<li><a href="#org80582b5">vStep5のプログラム</a></li>
+</ul>
+</li>
+<li><a href="#org5a7e252">vStep.6 ブロックの数を増やす.</a></li>
+<li><a href="#org853c58d">vStep.7 モデルを発展させる</a>
+<ul>
+<li><a href="#orgca96bf0">その1 ブロックの列を２列にして，列の間をうまくつなぐ.</a></li>
+<li><a href="#org4dfdd5a">その2 足をつける</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<hr />
+
+<ul class="org-ul">
+<li>最終更新日 2022.11.19</li>
+<li>作成開始日 2022.11.19</li>
+</ul>
+
+<hr />
+
+<div id="outline-container-org5815f74" class="outline-2">
+<h2 id="org5815f74">はじめに</h2>
+<div class="outline-text-2" id="text-org5815f74">
+</div>
+<div id="outline-container-org4b0c93e" class="outline-3">
+<h3 id="org4b0c93e">2次元版では、ベクトルなしでは始まらない</h3>
+<div class="outline-text-3" id="text-org4b0c93e">
+<p>
+2次元版では、
+</p>
+<ul class="org-ul">
+<li>位置</li>
+</ul>
+<p>
+は、x座標とy座標における値を考える必要があります。また、
+</p>
+<ul class="org-ul">
+<li>速度、</li>
+<li>外力（含む バネから受ける力、床から受ける摩擦力）</li>
+</ul>
+<p>
+についても、x方向とy方向を考える必要があります。
+</p>
+
+<p>
+これらはベクトル（2次元ベクトル）を使って表すと大変スッキリ考えることができます。
+</p>
+
+
+
+<div id="org8374966" class="figure">
+<p><img src="./imgs/fig_why_vector_1_small.png" alt="fig_why_vector_1_small.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org47e7986" class="outline-3">
+<h3 id="org47e7986">少し準備</h3>
+<div class="outline-text-3" id="text-org47e7986">
+</div>
+<div id="outline-container-org65c6142" class="outline-4">
+<h4 id="org65c6142">物理座標とピクセル座標</h4>
+<div class="outline-text-4" id="text-org65c6142">
+<p>
+シミュレーションの結果を表示するときには、原点が左上隅にあるピクセル座標で行います。
+このとき、縦座標（y軸）は下向きにとることになり、通常我々が使っているxy座標のy軸の向き（上向き）と違っているので多少混乱します。
+そこで、シミュレーションは通常の座標系（これを"物理座標系"と呼びましょう）を使い、表示のときにピクセル座標に直して表示するということにします。
+こうすると、ベクトルの向きをプログラムする際にも混乱がないのでおすすめです。
+</p>
+</div>
+
+<ul class="org-ul">
+<li><a id="org6c4567f"></a>物理座標の点とピクセル座標の点の対応 （ホワイトボード)<br />
+<div class="outline-text-5" id="text-org6c4567f">
+
+<div id="org45a26c1" class="figure">
+<p><img src="./imgs/fig_trans_coord_1_small.png" alt="fig_trans_coord_1_small.png" />
+</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+
+
+<div id="outline-container-org40826d0" class="outline-4">
+<h4 id="org40826d0">壁の処理</h4>
+<div class="outline-text-4" id="text-org40826d0">
+<p>
+1次元のときは、Windowの右方向に進む状況だけを考えていたので右の壁から出てしまう場合のみを処理すればよかったので単純でしたが、
+2次元のシミュレーションでは、上下左右の壁から出ていく状況も考慮します。
+</p>
+
+<p>
+また、1次元のときは、ブロックがWindowの外に出るとブロックの位置そのものをWindowの中に引き戻していました。
+今後の2次元のシミュレーションでは、ブロックの位置（物理座標）は触らずに、表示のときにピクセル座標に変換した値をWindowの中に納めることにします。
+そのために、剰余演算(%)を使います。
+</p>
+</div>
+
+<ul class="org-ul">
+<li><a id="org950dc25"></a>剰余演算(%)の効果について （ホワイトボード)<br />
+<div class="outline-text-5" id="text-org950dc25">
+
+<div id="org061fea9" class="figure">
+<p><img src="./imgs/fig_process_bdry_small.png" alt="fig_process_bdry_small.png" />
+</p>
+</div>
+
+
+
+<p>
+コード例
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"> <span style="color: #228b22;">void</span> <span style="color: #0000ff;">show</span>(<span style="color: #228b22;">double</span> <span style="color: #a0522d;">x</span>, <span style="color: #228b22;">double</span> <span style="color: #a0522d;">y</span>){
+  <span style="color: #b22222;">// </span>
+  <span style="color: #228b22;">float</span> <span style="color: #a0522d;">X</span> = (<span style="color: #228b22;">float</span>) (x / PPM);
+  <span style="color: #228b22;">float</span> <span style="color: #a0522d;">Y</span> = (<span style="color: #228b22;">float</span>) (y / PPM);
+  <span style="color: #b22222;">// </span>
+  X = X + width/2;
+  Y = -Y + height/2;
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22721;&#12398;&#20966;&#29702;&#65288;&#21608;&#26399;&#22659;&#30028;&#26465;&#20214;&#65289;</span>
+  <span style="color: #a020f0;">if</span>( X &gt; width ) X = X % width;
+  <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span>( X &lt; 0 ) X = (X % width) + width;
+
+  <span style="color: #a020f0;">if</span>( Y &gt; height ) Y = Y % height;
+  <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span>( Y &lt; 0 ) Y = (Y % height) + height;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#34920;&#31034;</span>
+  ellipse(X,Y, (<span style="color: #228b22;">float</span>)d, (<span style="color: #228b22;">float</span>)d);
+  <span style="color: #b22222;">//</span>
+}
+</pre>
+</div>
+
+<ul class="org-ul">
+<li><b>目標</b>
+<ul class="org-ul">
+<li>体をバネで繋がれたブロックでモデリングし，上からみた尺取り虫運動、そして、ミミズ運動のシミュレーションを行う.</li>
+</ul></li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1960060" class="outline-2">
+<h2 id="org1960060">vStep.1 床に置かれたブロックの動き（摩擦なし）</h2>
+<div class="outline-text-2" id="text-org1960060">
+<p>
+質量 \(m\) のブロックが一つ床に置かれているとする. 
+このとき，外から何らかの方法でブロックに（床と平行な）力が加わったときの，ブロックの動きを考える.
+</p>
+
+
+<div id="org8b315f0" class="figure">
+<p><img src="./imgs/fig_intro_2D_motion_vstep1.png" alt="fig_intro_2D_motion_vstep1.png" />
+</p>
+</div>
+
+<p>
+物体の動きは，力学におけるニュートンの運動方程式に従う. 
+</p>
+
+<ul class="org-ul">
+<li>ニュートンの運動方程式</li>
+</ul>
+\begin{eqnarray*}
+物体の質量 \times 物体の加速度 = 物体に加わっている力の総和
+\end{eqnarray*}
+</div>
+
+<div id="outline-container-orgfc56c96" class="outline-3">
+<h3 id="orgfc56c96">運動方程式</h3>
+<div class="outline-text-3" id="text-orgfc56c96">
+\begin{eqnarray*}
+\begin{array}{lll}
+   \boldsymbol{x}=(x,y) &:& ブロックの位置
+\\
+   \boldsymbol{v}=(v_x, v_y) &:& ブロックの速度
+\\
+   m &:& ブロックの質量
+\\
+   \boldsymbol{F}=(F_x, F_y) &:& ブロックに加わる力　
+\end{array}
+\end{eqnarray*}
+
+<p>
+　とすることき，ブロックの運動を記述する <b>運動方程式</b> は
+</p>
+
+\begin{eqnarray}
+m\dot{\boldsymbol{v}} = \boldsymbol{F}
+\label{eq:newton}
+\end{eqnarray}
+<p>
+成分毎に書くと
+</p>
+
+\begin{eqnarray*}
+\left\{
+\begin{array}{l}
+m\dot{v}_x = F_x
+\\
+m\dot{v}_y = F_y
+\end{array}
+\right.
+\end{eqnarray*}
+<p>
+ここで，\(\boldsymbol{v}\) の上の\(\dot{\ }\) （ドット）は，時間による微分を表し，\(\dot{\boldsymbol{v}} = \dfrac{d\boldsymbol{v}}{dt} = (\dfrac{dv_x}{dt},\dfrac{dv_y}{dt})\)
+は速度の時間による微分（単位時間あたりの速度変化），
+すなわち加速度を表す．
+</p>
+
+<p>
+また 速度は位置の時間による微分（単位時間あたりの位置変化）であるから，
+</p>
+\begin{eqnarray}
+\dot{\boldsymbol{x}} = \boldsymbol{v}
+\label{eq:V}
+\end{eqnarray}
+<p>
+成分毎に書くと、
+</p>
+\begin{eqnarray*}
+\left\{
+\begin{array}{ll}
+\dot{x} = v_x
+\\
+\dot{y} = v_y
+\end{array}
+\right.
+\end{eqnarray*}
+<p>
+である.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcf72ad7" class="outline-3">
+<h3 id="orgcf72ad7">シミュレーションのための準備</h3>
+<div class="outline-text-3" id="text-orgcf72ad7">
+</div>
+<div id="outline-container-org1bcd82d" class="outline-4">
+<h4 id="org1bcd82d">時間の離散化</h4>
+<div class="outline-text-4" id="text-org1bcd82d">
+<ul class="org-ul">
+<li>コンピュータでシミュレーションする為に，連続的な時間 ( \(t \in \bf{R}\) ) を 最小の時間間隔 \(\Delta t\) を設定することにより，*離散的* に扱う．( \(t = 0, \Delta{t}, 2\Delta{t}, \dots\) ).</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org09fbeaa" class="outline-4">
+<h4 id="org09fbeaa">微分方程式の離散化</h4>
+<div class="outline-text-4" id="text-org09fbeaa">
+<p>
+時間の離散化により，時間による微分も離散化できる．やり方は色々あるが，ここでは最も直感的な方法であるオイラー法を紹介する.
+</p>
+
+
+
+\begin{eqnarray}
+\begin{array}{l}
+  \boldsymbol{v}(t+\Delta{t}) = \boldsymbol{v}(t) + \dfrac{\boldsymbol{F}}{m} \Delta{t}
+  \\
+  \boldsymbol{x}(t+\Delta{t}) = \boldsymbol{x}(t) + \boldsymbol{v}(t) \Delta{t}
+\end{array}
+\label{eq:step1}
+\end{eqnarray}
+
+<p>
+成分毎に書くと,
+</p>
+
+\begin{eqnarray*}
+\begin{array}{ll}
+\left\{
+\begin{array}{ll}
+  v_x(t+\Delta{t}) = v_x(t) + \dfrac{F_x}{m} \Delta{t}
+\\
+  v_y(t+\Delta{t}) = v_y(t) + \dfrac{F_y}{m} \Delta{t}
+\end{array}
+\right.
+\\
+\left\{
+\begin{array}{ll}
+  x(t+\Delta{t}) = x(t) + v_x(t) \Delta{t}
+\\
+  y(t+\Delta{t}) = y(t) + v_y(t) \Delta{t}
+\end{array}
+\right.
+\end{array}
+\end{eqnarray*}
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgfe91c86" class="outline-3">
+<h3 id="orgfe91c86">vStep.1</h3>
+<div class="outline-text-3" id="text-orgfe91c86">
+<p>
+ それでは、関係式(\ref{eq:step1})を使って、ブロックの動きをシミュレーションしてみよう
+（プログラミング言語としてProcessingを用います）。
+</p>
+
+<ul class="org-ul">
+<li>以下のシミュレーションの主な設定
+<ul class="org-ul">
+<li>時刻 \(t=0\) のときに（瞬間的に）力\(F_ {out} = 200\) をブロックに加える。</li>
+<li>それ以後(\(t>0\)) は、力を加えない（\(F_{out}=0\))。</li>
+</ul></li>
+</ul>
+
+<p>
+まずは、ベクトルのクラスを使わないバージョンでプログラムを書いてみる。
+</p>
+</div>
+
+<div id="outline-container-orgdb92593" class="outline-4">
+<h4 id="orgdb92593">vStep.1-1 (ベクトルのクラスを使わないバージョン)</h4>
+<div class="outline-text-4" id="text-orgdb92593">
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #b22222;">//</span><span style="color: #b22222;">===============</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">vStep1-1.pde</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">===============</span>
+
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#20301;&#32622; [mm]</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">x</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">x&#26041;&#21521;(&#27178;)  </span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">y</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">y&#26041;&#21521;(&#32294;)</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#36895;&#24230; [mm/s]</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">vx</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">x&#26041;&#21521;(&#27178;)</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">vy</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">y&#26041;&#21521;(&#32294;)</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#27425;&#12398;&#26178;&#21051;&#12398;&#20301;&#32622;&#12392;&#36895;&#24230;</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">xx</span>;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">yy</span>;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">vvx</span>;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">vvy</span>;
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">t</span> = 0; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">dt</span> = 0.1; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;&#12398;&#21051;&#12415;&#24133;</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">d</span> = 10;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">m</span> = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">[g]</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22806;&#21147; [g * mm/s^2 = &#956;N]</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">Fout_x</span> = 200;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">Fout_y</span> = 50;
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">PPM</span> = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">[pixel/mm] </span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">setup</span>() {
+  size(400, 200); 
+  <span style="color: #b22222;">//</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#20301;&#32622; (&#26178;&#21051;t=0&#12398;&#20301;&#32622;)</span>
+  x = 0; 
+  y = 0;
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#36895;&#24230;</span>
+  vx = 0; 
+  vy = 0;
+  <span style="color: #b22222;">//</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">show(x,y);</span>
+}
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">draw</span>() {
+  background(200);
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21147;&#12398;&#26356;&#26032;</span>
+  <span style="color: #a020f0;">if</span> ( t &gt; 0 ) {
+    Fout_x = 0;
+    Fout_y = 0;
+  }
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36939;&#21205;eq</span>
+  xx = x + vx*dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(1')</span>
+  yy = y + vy*dt;
+
+  vvx = vx + (Fout_x/m) * dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(2')</span>
+  vvy = vy + (Fout_y/m) * dt;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#34920;&#31034;</span>
+  show(xx,yy);
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20301;&#32622;&#12392;&#36895;&#24230;&#12398;&#26356;&#26032;</span>
+  x = xx;
+  y = yy;
+
+  vx = vvx;
+  vy = vvy;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;&#12398;&#26356;&#26032;</span>
+  t += dt;  
+}
+
+<span style="color: #b22222;">//</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">Sub-routine</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">show</span>(<span style="color: #228b22;">double</span> <span style="color: #a0522d;">x</span>, <span style="color: #228b22;">double</span> <span style="color: #a0522d;">y</span>){
+  <span style="color: #b22222;">// </span>
+  <span style="color: #228b22;">float</span> <span style="color: #a0522d;">X</span> = (<span style="color: #228b22;">float</span>) (x / PPM);
+  <span style="color: #228b22;">float</span> <span style="color: #a0522d;">Y</span> = (<span style="color: #228b22;">float</span>) (y / PPM);
+  <span style="color: #b22222;">// </span>
+  X = X + width/2;
+  Y = -Y + height/2;
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22721;&#12398;&#20966;&#29702;&#65288;&#21608;&#26399;&#22659;&#30028;&#26465;&#20214;&#65289;</span>
+  <span style="color: #a020f0;">if</span>( X &gt; width ) X = X % width;
+  <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span>( X &lt; 0 ) X = (X % width) + width;
+
+  <span style="color: #a020f0;">if</span>( Y &gt; height ) Y = Y % height;
+  <span style="color: #a020f0;">else</span> <span style="color: #a020f0;">if</span>( Y &lt; 0 ) Y = (Y % height) + height;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#34920;&#31034;</span>
+  ellipse(X,Y, (<span style="color: #228b22;">float</span>)d, (<span style="color: #228b22;">float</span>)d);
+  <span style="color: #b22222;">//</span>
+}
+<span style="color: #b22222;">//</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">END ALL</span>
+<span style="color: #b22222;">//</span>
+
+</pre>
+</div>
+
+<p>
+次に、ベクトルのクラスを使ってプログラムを書こう。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge7403b5" class="outline-3">
+<h3 id="orge7403b5">vStep.1-2 (ベクトルのクラスを使うバージョン)</h3>
+<div class="outline-text-3" id="text-orge7403b5">
+<p>
+(x,y), (vx, vy) , (Fout_x, Fout_y) ひとまとめ（ベクトル）にして、扱う。
+</p>
+
+<p>
+まず、 class DVector() を作る
+</p>
+
+<p>
+[新規タブ] -&gt; 名前: DVector
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #a020f0;">class</span> <span style="color: #228b22;">DVector</span>{
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12501;&#12451;&#12540;&#12523;&#12489;&#22793;&#25968;</span>
+  <span style="color: #228b22;">double</span> <span style="color: #a0522d;">x</span>;
+  <span style="color: #228b22;">double</span> <span style="color: #a0522d;">y</span>;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12467;&#12531;&#12473;&#12488;&#12521;&#12463;&#12479;</span>
+  <span style="color: #0000ff;">DVector</span>(<span style="color: #228b22;">double</span> <span style="color: #a0522d;">x_</span>, <span style="color: #228b22;">double</span> <span style="color: #a0522d;">y_</span>){
+    x = x_;
+    y = y_;
+  }
+  <span style="color: #b22222;">//</span>
+}
+</pre>
+</div>
+
+
+<p>
+次に、メインタブを書き換えていく
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java">
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#20301;&#32622;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double x; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double y; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">x</span>; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;&#65289;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#36895;&#24230;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double vx; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double vy; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">v</span>;   <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;&#65289;</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">t</span> = 0; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#27425;&#12398;&#26178;&#21051;&#12398;&#20301;&#32622;&#12392;&#36895;&#24230;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double xx; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double yy; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">xx</span>;  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;&#65289;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double vvx; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double vvy; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">vv</span>;   <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;&#65289;</span>
+
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">dt</span> = 0.1; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;&#12398;&#21051;&#12415;&#24133;</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">d</span> = 10;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">m</span> = 1.0;
+<span style="color: #b22222;">//</span>
+
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double Fout_x = 200; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">double Fout_y = 50;  // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">Fout</span>; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;&#65289;</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">PPM</span> = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">[pixel/mm] </span>
+<span style="color: #b22222;">//</span>
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">setup</span>() {
+  size(400, 200);
+  <span style="color: #b22222;">//</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#20301;&#32622; (&#26178;&#21051;t=0&#12398;&#20301;&#32622;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">x = 0; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">y = 0; // (&#21066;&#38500;)</span>
+  x = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0, 0); <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  xx = x; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#36895;&#24230;</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vx = 0; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vy = 0; // (&#21066;&#38500;)</span>
+  v = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0, 0); <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  vv = v; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#22806;&#21147;</span>
+  Fout = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(200, 50); <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">//</span>
+  show(x.x, x.y);  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#22793;&#26356;&#65289;</span>
+}
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">draw</span>() {
+  background(200);
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21147;&#12398;&#26356;&#26032;</span>
+  <span style="color: #a020f0;">if</span> ( t &gt; 0 ) {
+    Fout.x = 0;  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#21066;&#38500;&#65289;</span>
+    Fout.y = 0;  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#21066;&#38500;&#65289;      </span>
+    Fout.x = 0;  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+    Fout.y = 0;  <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  }
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36939;&#21205;eq</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">xx = x + vx*dt; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">yy = y + vy*dt; // (&#21066;&#38500;)</span>
+  xx.x = x.x + v.x * dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  xx.y = x.y + v.y * dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vvx = vx + (Fout_x/m) * dt; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vvy = vy + (Fout_y/m) * dt; // (&#21066;&#38500;)</span>
+  vv.x = v.x + (Fout.x/m) * dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  vv.y = v.y + (Fout.y/m) * dt; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#34920;&#31034;</span>
+  show(xx.x, xx.y); <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#22793;&#26356;)</span>
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20301;&#32622;&#12392;&#36895;&#24230;&#12398;&#26356;&#26032;</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">x = xx; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">y = yy; // (&#21066;&#38500;)</span>
+  x.x = xx.x; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  x.y = xx.y; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vx = vvx; // (&#21066;&#38500;)</span>
+  <span style="color: #b22222;">//</span><span style="color: #b22222;">vy = vvy; // (&#21066;&#38500;)</span>
+  v.x = vv.x; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+  v.y = vv.y; <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;&#12398;&#26356;&#26032;</span>
+  t += dt;
+}  
+
+<span style="color: #b22222;">//</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">Sub-routine (&#22793;&#26356;&#12394;&#12375;)</span>
+<span style="color: #b22222;">//</span>
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcf0553b" class="outline-2">
+<h2 id="orgcf0553b">vStep.2 摩擦（まさつ）の導入</h2>
+<div class="outline-text-2" id="text-orgcf0553b">
+<p>
+摩擦には色々な種類があるが，ここでは簡単に，粘性（ねんせい）摩擦を考える．
+</p>
+<ul class="org-ul">
+<li>粘性摩擦とは 速度に比例した摩擦力</li>
+</ul>
+
+<p>
+摩擦力もベクトルになる。
+</p>
+
+\begin{eqnarray*}
+     摩擦力ベクトル &=& - (摩擦係数)\times  \boldsymbol{速度ベクトル}
+\\
+\boldsymbol{F}_{fric} &=& - \mu  \boldsymbol{v}
+\end{eqnarray*}
+<p>
+成分毎に書くと, 
+</p>
+\begin{eqnarray*}
+\left\{
+\begin{array}{lll}
+{F_{fric}}_x &=& - \mu  v_x
+\\
+{F_{fric}}_y &=& - \mu  v_y
+\end{array}
+\right.
+\end{eqnarray*}
+
+
+<p>
+運動方程式
+</p>
+
+\begin{eqnarray*}
+m\dot{\boldsymbol{v}} &= \boldsymbol{F}_{out} + \boldsymbol{F}_{fric}
+\\
+         &= \boldsymbol{F}_{out} - \mu \boldsymbol{v}
+\end{eqnarray*}
+</div>
+
+<div id="outline-container-org8c04d82" class="outline-4">
+<h4 id="org8c04d82">vStep.2のプログラム</h4>
+<div class="outline-text-4" id="text-org8c04d82">
+<ul class="org-ul">
+<li>摩擦係数用の変数の追加</li>
+<li>ブロックに働く力に摩擦力を加える</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-java">
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22793;&#26356;&#12394;&#12375;</span>
+
+<span style="color: #228b22;">float</span> <span style="color: #a0522d;">mu</span> = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25705;&#25830;&#20418;&#25968; (&lt;- &#36861;&#21152;)</span>
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">setup</span>() {
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#22793;&#26356;&#12394;&#12375;</span>
+}
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">draw</span>() {
+  background(200);
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21147;&#12398;&#26356;&#26032;</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#22806;&#21147;</span>
+  <span style="color: #a020f0;">if</span> ( t &gt; 0 ) {
+    Fout = 0;
+  }
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#25705;&#25830;&#21147;&#65288;&lt;- &#36861;&#21152;&#65289;</span>
+  Ffric.x = - mu*v.x;  
+  Ffric.y = - mu*v.y;
+
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12395;&#20685;&#12367;&#21147;&#12398;&#21512;&#35336; // &#65288;&lt;- &#22793;&#26356;&#65289;</span>
+  F.x = Fout.x + Ffric.x; 
+  F.y = Fout.y + Ffric.y;
+
+  <span style="color: #b22222;">//</span>
+  <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20197;&#19979; &#22793;&#26356;&#12394;&#12375;</span>
+  <span style="color: #b22222;">//</span>
+}
+<span style="color: #b22222;">// </span><span style="color: #b22222;">END ALL</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2fb1170" class="outline-2">
+<h2 id="org2fb1170">vStep.3 二つのブロックをバネでつなぐ</h2>
+<div class="outline-text-2" id="text-org2fb1170">
+<p>
+ブロック1とブロック2の二つをバネでつないだ系を考える.
+</p>
+</div>
+
+<div id="outline-container-orge1c394f" class="outline-3">
+<h3 id="orge1c394f">バネがブロックに及ぼす力</h3>
+<div class="outline-text-3" id="text-orge1c394f">
+<p>
+バネに何も力が加わっていない時の長さを自然長(しぜんんちょう）といい， 
+</p>
+
+\begin{eqnarray*}
+L_0
+\end{eqnarray*}
+
+<p>
+で表す．
+</p>
+
+<p>
+ 二つのブロックが自然長（\(L_0\)）より近い距離にあるときバネは縮んだ状態なので伸びようとする.
+したがって，バネはブロックに対してそれらが離れる方向に力を及ぼす.
+一方，二つのブロックが自然長より離れていると，バネは縮もうとする.
+</p>
+
+<p>
+したがって，ブロックに対してそれらが近く方向にに力を及ぼす.
+このことからブロック1,2がバネから受ける力は，いつも反対の方向で大きさは同じである.
+</p>
+
+<p>
+すなわち,  バネ係数を \(K\) とすると，
+</p>
+
+\begin{eqnarray*}  
+  	バネがブロック1に及ぼす力\quad & \boldsymbol{F}_{1} &=& K (|\boldsymbol{x}_2 - \boldsymbol{x}_1| -L_0) \boldsymbol{e}_{12}
+\\
+	バネがブロック2に及ぼす力\quad &  \boldsymbol{F}_{2} &=& K (|\boldsymbol{x}_1 - \boldsymbol{x}_2| -L_0) \boldsymbol{e}_{21}
+\end{eqnarray*}
+<p>
+ここで、
+\(\boldsymbol{e}_{12}\) はブロック1を始点としたときにブロック2がいる方向を表す単位ベクトル
+</p>
+
+\begin{eqnarray*}
+ \boldsymbol{e}_{12} = \dfrac{\boldsymbol{x}_2 - \boldsymbol{x}_1}
+{|\boldsymbol{x}_2 - \boldsymbol{x}_1|}
+\end{eqnarray*}
+
+<p>
+\(\boldsymbol{e}_{21}\) はブロック2を始点としたときにブロック1がいる方向を表す単位ベクトル
+</p>
+
+\begin{eqnarray*}
+ \boldsymbol{e}_{21} &= \dfrac{\boldsymbol{x}_1 - \boldsymbol{x}_2}
+{|\boldsymbol{x}_1 - \boldsymbol{x}_2|}
+\\
+& = -\boldsymbol{e}_{12}
+\end{eqnarray*}
+
+<p>
+ここで、 \(|\boldsymbol{x}|\) はベクトル \(\boldsymbol{x}(=(x,y))\) の大きさで
+</p>
+\begin{eqnarray*}
+|\boldsymbol{x}| = \sqrt{x^2 + y^2}
+\end{eqnarray*}
+
+<p>
+以上より，ブロック1とブロック2の運動方程式はそれぞれ，
+</p>
+
+\begin{eqnarray*}
+\begin{array}{lll}
+ m\dot{\boldsymbol{v}}_1 &= \boldsymbol{F}_1 - \mu_1 \boldsymbol{v}_1
+\\
+ m\dot{\boldsymbol{v}}_2 &= \boldsymbol{F}_2 - \mu_2 \boldsymbol{v}_2
+\end{array}
+\end{eqnarray*}
+</div>
+
+<ul class="org-ul">
+<li><a id="org7f93298"></a>ブロックがバネから受ける力を表す式について：1次元の場合（ホワイトボード)<br />
+<div class="outline-text-5" id="text-org7f93298">
+
+<div id="org98399c6" class="figure">
+<p><img src="./imgs/fig_connectBySpring_1D.png" alt="fig_connectBySpring_1D.png" />
+</p>
+</div>
+</div>
+</li>
+
+<li><a id="org14c2ce8"></a>ブロックがバネから受ける力を表す式について：2次元の場合（ホワイトボード)<br />
+<div class="outline-text-5" id="text-org14c2ce8">
+
+<div id="orgb749765" class="figure">
+<p><img src="./imgs/fig_connectBySpring_2D.png" alt="fig_connectBySpring_2D.png" />     
+</p>
+</div>
+</div>
+</li>
+</ul>
+</div>
+
+
+<div id="outline-container-org2419f3c" class="outline-3">
+<h3 id="org2419f3c">vStep3のプログラム</h3>
+<div class="outline-text-3" id="text-org2419f3c">
+<p>
+複数のブロックに対応する簡単な方法として配列を用いる. 配列の要素は、DVector変数である。
+</p>
+
+\begin{eqnarray*}
+  x[0], v[0] &:& ブロック1の位置と速度
+\\
+  x[1], v[1] &:& ブロック2の位置と速度
+\end{eqnarray*}
+<p>
+また，
+</p>
+\begin{eqnarray*}
+   F[0] &:& ブロック1に働く力の合計
+\\
+   F[1] &:& ブロック2に働く力の合計
+\end{eqnarray*}
+<p>
+とする.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java"><span style="color: #b22222;">//</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">vstep3.pde</span>
+<span style="color: #b22222;">//</span>
+
+<span style="color: #b22222;">//  </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#20301;&#32622;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector x; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> [] <span style="color: #a0522d;">x</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#12502;&#12525;&#12483;&#12463;&#12398;&#36895;&#24230;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector v; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> [] <span style="color: #a0522d;">v</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">t</span> = 0; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;</span>
+<span style="color: #b22222;">// </span><span style="color: #b22222;">&#27425;&#12398;&#26178;&#21051;&#12398;&#20301;&#32622;&#12392;&#36895;&#24230;</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector xx; // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector vv; // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> [] <span style="color: #a0522d;">xx</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;) </span>
+<span style="color: #228b22;">DVector</span> [] <span style="color: #a0522d;">vv</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">dt</span> = 0.1; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#26178;&#38291;&#12398;&#21051;&#12415;&#24133;</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">d</span> = 10;
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">m</span> = 1.0;
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">mu</span> = 0.3; <span style="color: #b22222;">//</span><span style="color: #b22222;">1 // &#25705;&#25830;&#20418;&#25968; </span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector Fout;   // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector Ffric;  // (&#21066;&#38500;)</span>
+<span style="color: #b22222;">//</span><span style="color: #b22222;">DVector F;      // (&#21066;&#38500;)</span>
+<span style="color: #228b22;">DVector</span> [] <span style="color: #a0522d;">F</span>;<span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">L0</span> = 4*d; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12496;&#12493;&#12398;&#33258;&#28982;&#38263; (&#36861;&#21152;)</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">K</span>  = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12496;&#12493;&#20418;&#25968;     (&#36861;&#21152;)</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">DVector</span> <span style="color: #a0522d;">e</span> = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0, 0); <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21336;&#12395;&#12505;&#12463;&#12488;&#12523;&#29992;&#12398;&#22793;&#25968; (&#36861;&#21152;)</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">PPM</span> = 1.0; <span style="color: #b22222;">// </span><span style="color: #b22222;">[pixel/mm]</span>
+<span style="color: #b22222;">//</span>
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">setup</span>() {
+    size(400, 200);
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;) </span>
+    x = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>[2];
+    xx = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>[2];
+    v = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>[2];
+    vv = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>[2];
+    F = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>[2];
+    <span style="color: #b22222;">//</span>
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#20301;&#32622; (&#26178;&#21051;t=0&#12398;&#20301;&#32622;)</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#21066;&#38500;)</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">x = new DVector(0, 0); </span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">xx = x;</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        <span style="color: #228b22;">int</span> <span style="color: #a0522d;">a</span> = 10;
+        x[i] = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0 - i*2*L0, -i*a);
+        xx[i] = x[i];
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#36895;&#24230;</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#65288;&#21066;&#38500;)</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">vx = 0;</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">vy = 0;</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">v = new DVector(0, 0);</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">vv = v;</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        v[i] = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0, 0);
+        vv[i] = v[i];
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21021;&#26399;&#22806;&#21147;</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#65288;&#21066;&#38500;)</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">Fout = new DVector(200, 50);</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">F = new DVector(0,0);</span>
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">Ffric = new DVector(0,0);</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        F[i] = <span style="color: #a020f0;">new</span> <span style="color: #228b22;">DVector</span>(0, 0);
+    }
+
+    <span style="color: #b22222;">//</span><span style="color: #b22222;">show(x,y); // (&#21066;&#38500;)</span>
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#36861;&#21152;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        show(x[i].x, x[i].y);
+    }
+}
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">draw</span>() {
+    background(200);
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#21147;&#12398;&#26356;&#26032; (&#22793;&#26356;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        <span style="color: #a020f0;">if</span> ( i==0 ) {
+            <span style="color: #b22222;">//</span>
+            <span style="color: #228b22;">double</span> <span style="color: #a0522d;">dist</span> = Math.sqrt(Math.pow(x[1].x-x[0].x, 2) + Math.pow(x[1].y-x[0].y, 2.0));
+            e.x = (x[1].x - x[0].x)/dist;
+            e.y = (x[1].y - x[0].y)/dist;
+
+            F[0].x = K*(dist - L0) * e.x - mu*v[0].x;
+            F[0].y = K*(dist - L0) * e.y - mu*v[0].y;
+        } <span style="color: #a020f0;">else</span> {
+
+            <span style="color: #228b22;">double</span> <span style="color: #a0522d;">dist</span> = Math.sqrt(Math.pow(x[0].x-x[1].x, 2) + Math.pow(x[0].y-x[1].y, 2.0));
+            e.x = (x[0].x - x[1].x)/dist;
+            e.y = (x[0].y - x[1].y)/dist;
+
+            F[1].x = K*(dist - L0) * e.x - mu*v[1].x;
+            F[1].y = K*(dist - L0) * e.y - mu*v[1].y;
+        }
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#36939;&#21205;eq (&#22793;&#26356;)</span>
+
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span>  <span style="color: #a0522d;">i</span> = 0; i &lt;2; i++) {
+        xx[i].x = x[i].x + v[i].x * dt;
+        xx[i].y = x[i].y + v[i].y * dt;
+
+        vv[i].x = v[i].x + (F[i].x/m) * dt;
+        vv[i].y = v[i].y + (F[i].y/m) * dt;
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#34920;&#31034; (&#22793;&#26356;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        show(x[i].x, x[i].y);
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">&#20301;&#32622;&#12392;&#36895;&#24230;&#12398;&#26356;&#26032; (&#22793;&#26356;)</span>
+    <span style="color: #a020f0;">for</span> (<span style="color: #228b22;">int</span> <span style="color: #a0522d;">i</span>=0; i&lt;2; i++) {
+        x[i] = xx[i];
+        v[i] = vv[i];
+    }
+
+    <span style="color: #b22222;">// </span><span style="color: #b22222;">(&#20197;&#19979;&#22793;&#26356;&#12394;&#12375;&#65289;</span>
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9ab2a1c" class="outline-2">
+<h2 id="org9ab2a1c">Step.4 バネの自然長を周期的に変化させる : 筋肉の周期的な力の発生の模倣</h2>
+<div class="outline-text-2" id="text-org9ab2a1c">
+<p>
+  摩擦がある場合，上のままだといづれ止まってしまう.
+　動き続けるにはどうしたら良いだろうか？
+  生き物は筋肉を周期的に収縮弛緩させて体の伸び縮みを繰り返している．
+  このような，筋肉の周期的な力の発生を簡単にモデル化する為のアイディアの一つとして，
+  バネの自然長を周期的に変化させる方法を紹介する.
+</p>
+</div>
+
+<div id="outline-container-orgdbc2d6a" class="outline-3">
+<h3 id="orgdbc2d6a">二つのブロックの距離が一定でも，バネの自然長が変われば力が変化する.</h3>
+<div class="outline-text-3" id="text-orgdbc2d6a">
+<p>
+今, バネの自然長が変化できるとする (\(L\) と書く).
+</p>
+
+<p>
+このとき, ブロックに働く力は
+</p>
+
+\begin{eqnarray*}
+FS_1 &=& K((X_2 - X_1) - L)
+\\
+FS_2 &=& -FS_1
+\end{eqnarray*}
+
+<p>
+  したがって, 二つのブロックの距離 \(\Delta{X} = X_2 - X_1\) が一定でも, Lが変化すれば,
+\(FS_1\) や \(FS_2\) が変化する.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdaf3334" class="outline-3">
+<h3 id="orgdaf3334">バネの自然長を周期的に変化させる.</h3>
+<div class="outline-text-3" id="text-orgdaf3334">
+<p>
+周期的な運動の基本モデルは，中心が原点,半径Aの円周上を移動する点の運動である.
+このとき，点の位置は，半径Rと基準位置からの角度(\(\theta\))で指定できる
+</p>
+
+<p>
+すなわち 円周上の点の$(x,y)$座標は，三角関数を用いて
+</p>
+\begin{eqnarray*}
+\left\{\begin{array}{l}
+x = A\cos(\theta)
+\\
+y = A\sin(\theta)
+\end{array}
+\right.
+\end{eqnarray*}
+
+<p>
+と表せる.
+</p>
+
+<p>
+円周上をくるくると一定速度で回る点の動きは，\(\theta\) を一定速度で増やしていく（減らしていく）ことよって表現できる.
+</p>
+
+<p>
+ここで，\(y\) 座標か \(x\) 座標のどちらか一方に注目すると（今は \(y\) 座標にする），
+</p>
+
+\begin{eqnarray*}
+y = A\sin(\theta)
+\end{eqnarray*}
+
+<p>
+点の位置が原点を中心に行ったり来たりしていることが見て取れるだろう.
+</p>
+
+<p>
+このようにして点の周期的な運動を表す時, \(\theta\) をこの運動の <b>位相</b> ,  
+\(A\) を <b>振幅</b> と呼ぶ.
+</p>
+
+<p>
+原点の位置を \(y\) 方向に \(L_0\) だけずらすと
+</p>
+
+\begin{eqnarray*}
+y = L_0 + A\sin(\theta)
+\end{eqnarray*}
+
+<p>
+点の位置が \(L_0\) を中心に行ったり来たりしていることが見て取れるだろう.
+</p>
+
+<p>
+この動きをバネの自然長を周期的に変化させるのに使う．
+今, 自然長 \(L\) と位相 \(\theta\) は 時間 \(t\) によって変化するので,
+それぞれ \(L(t)\) ，\(\theta(t)\) とかくと
+</p>
+
+\begin{eqnarray*}
+L(t) &=& L_0 + A*\sin(\theta(t))
+\\
+\dot{\theta}(t)    &=& \Omega_0 \ (定数)
+\end{eqnarray*}
+
+
+<p>
+と表せる．ここで，２番目の式は， 位相 \(\theta\) が一定の速度で変化することを表す式で，左辺は位相速度（角速度）を表す.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ad5e5f" class="outline-3">
+<h3 id="org0ad5e5f">vStep4のプログラム</h3>
+<div class="outline-text-3" id="text-org0ad5e5f">
+<pre class="example">
+//
+// 
+// 変更なし
+// 
+double K = 0.2; (変更)
+// 
+// 変更なし
+//
+double L;   //  バネの自然長   (追加)
+double theta; // バネの自然長の位相 (追加)
+double Omega = 1.0; // バネの自然長の位相速度 (追加)
+double A = L0/4.0; // バネの自然長の振幅 (追加)
+
+void setup() {
+　//
+  // 変更なし 
+  //
+  theta = 0; // (追加)
+}
+void draw() {
+  background(200);
+  line(0, height/2+d, width, height/2+d);
+
+  for (int i=0; i&lt;2; i++) {
+    if ( i==0) {
+      //
+      double dist = Math.sqrt(Math.pow(x[1].x-x[0].x, 2.0) + Math.pow(x[1].y-x[0].y, 2.0));
+      e.x = (x[1].x - x[0].x)/dist;
+      e.y = (x[1].y - x[0].y)/dist;
+
+      F[0].x = K*(dist - L) * e.x - mu*v[0].x;
+      F[0].y = K*(dist - L) * e.y - mu*v[0].y;
+    } else {
+
+      double dist = Math.sqrt(Math.pow(x[0].x-x[1].x, 2.0) + Math.pow(x[0].y-x[1].y, 2.0));
+      e.x = (x[0].x - x[1].x)/dist;
+      e.y = (x[0].y - x[1].y)/dist;
+
+      F[1].x = K*(dist - L) * e.x - mu*v[1].x;
+      F[1].y = K*(dist - L) * e.y - mu*v[1].y;
+    }
+  }
+
+
+  // 運動eq (変更なし)
+
+  // 表示 (変更なし)
+
+  // 位置と速度の更新（変更なし）
+
+  // バネの自然長の更新 (追加)
+  theta += Omega*dt;
+  theta %= 2*PI;
+  L = L0 + A*sin(theta);
+
+  // 時間の更新 （変更なし）
+
+}
+// END ALL
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb3f593e" class="outline-2">
+<h2 id="orgb3f593e">vStep.4a 少し改良</h2>
+<div class="outline-text-2" id="text-orgb3f593e">
+</div>
+<div id="outline-container-orgaf2b122" class="outline-3">
+<h3 id="orgaf2b122">Step4 からの変更点</h3>
+<div class="outline-text-3" id="text-orgaf2b122">
+<p>
+壁にバネ（バネ係数K) で繋がれて摩擦のない床の上に置かれたブロック（質量\(m\)）は,
+少し伸ばすか縮めてから手を離すと振動します。振動の振幅は最初にどのくらい伸ばしたか、
+縮めたかできまりますが、振動の周波数は Kとm で決まり、
+　
+　周波数 Omega = sqrt(K/m) で安定に振動しつづけます。（この周波数は、このシステムの固有周波数と呼ばれます）。
+</p>
+
+<ul class="org-ul">
+<li><a href="https://aomoriu-my.sharepoint.com/:i:/g/personal/shigeru-kuroda_aomori-u_ac_jp/EZTLcfDoSfxKl8R7Gg-gY9EBXhjCO-eM9Wb-HXAKDXfauA?e=V5N3v4">(説明資料）調和振動の固有周波数について (2022/11/24)</a></li>
+</ul>
+
+<p>
+我々のモデルでも、振動を安定に実現したい場合は、この周波数は有用です。
+（理由は別の機会に説明します。 ）
+</p>
+
+<ul class="org-ul">
+<li><a href="https://aomoriu-my.sharepoint.com/:i:/g/personal/shigeru-kuroda_aomori-u_ac_jp/EdEqGhY3PshFhVed70JHieEBkiTL_4eA74vA4QjYWKW1rg?e=zXaFid">(説明資料)バネの両端に質点の場合の固有振動数について(2022/11/24)</a></li>
+</ul>
+
+<p>
+Omegaの設定をその都度微調整するのは大変なので、今回とりあえず
+この周波数にしておきます。
+（今後、ブロックの数が増えたり、バネが増えたりしたら、これを少しアレンジします。）
+</p>
+
+<div class="org-src-container">
+<pre class="src src-java">
+<span style="color: #b22222;">// </span><span style="color: #b22222;">vstep4a.pde</span>
+
+&#22793;&#26356;&#12394;&#12375;
+
+<span style="color: #228b22;">double</span> <span style="color: #a0522d;">Omega</span> = Math.sqrt(K/m); <span style="color: #b22222;">// </span><span style="color: #b22222;">&#12496;&#12493;&#12398;&#33258;&#28982;&#38263;&#12398;&#20301;&#30456;&#36895;&#24230; (&lt;- &#22793;&#26356;&#28857;)</span>
+
+&#22793;&#26356;&#12394;&#12375;
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">setup</span>(){
+
+&#12288;&#22793;&#26356;&#12394;&#12375;
+
+}
+
+<span style="color: #228b22;">void</span> <span style="color: #0000ff;">draw</span>(){
+
+&#20197;&#19979;&#22793;&#26356;&#12394;&#12375;&#12290;
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org975177f" class="outline-2">
+<h2 id="org975177f">vStep.5 摩擦に異方性を導入する.</h2>
+<div class="outline-text-2" id="text-org975177f">
+<p>
+上のままだと，動き続けるが移動ができない.
+踏ん張っている肢と持ち上げて前に動かしている肢の違いを，
+ブロックの移動方向に応じて摩擦係数を変化させることによって
+モデルリングする.
+</p>
+
+<p>
+1次元モデルでは、
+正の方向（Windowの右方向）を前進と考えて、各ブロックの速度が、
+正か負で摩擦係数を切り替えた。
+</p>
+
+<p>
+2次元モデルでは、前進方向は頭がある方向である。
+より正確には、お尻を始点、頭を終点とするベクトルの向きが前進方向になる。
+これを"前方ベクトル"と呼ぶことにする。
+そして、各ブロックの速度が、前方ベクトルと同じ向きか逆の向きかで摩擦係数を
+切り替えれば良い。
+</p>
+
+<p>
+それでは、それらが同じ向きか逆の向きかをチェックするにはどうすれば良いだろうか。
+二つのベクトルの向きを測るには、これらのベクトルの内積を計算すれば良い。
+一般に二つのベクトル \(\boldsymbol{a}, \boldsymbol{b} の内積 inner(\boldsymbol{a}, \boldsymbol{b})\) は
+</p>
+\begin{eqnarray*}
+　　　　　　　inner(\boldsymbol{a}, \boldsymbol{b}) := |\boldsymbol{a}||\boldsymbol{b}|\cos(\theta(\boldsymbol{a},\boldsymbol{b}))
+\end{eqnarray*}
+
+<p>
+と定義される。
+ここで、
+</p>
+<ul class="org-ul">
+<li>\(\boldsymbol{|a|}\) は ベクトル \(\boldsymbol{a}\) の大きさ,</li>
+<li>\(\theta(\boldsymbol{a}, \boldsymbol{b})\) は \(\boldsymbol{a}と\boldsymbol{b}\) のなす角</li>
+</ul>
+<p>
+である.
+従って、\(\boldsymbol{a},\boldsymbol{b}\) の方向が完全に一致
+(すなわち, \(^theta(\boldsymbol{a},\boldsymbol{b})=0\) ) するとき、
+</p>
+
+\begin{eqnarray*}
+ inner(\boldsymbol{a},\boldsymbol{b}) = |\boldsymbol{a}||\boldsymbol{b}|、
+\end{eqnarray*}
+<p>
+となり、
+ 完全に反対向き (すなわち、 \(\theta(\boldsymbol{a},\boldsymbol{b})=\pi\) )のとき、
+</p>
+ \begin{eqnarray*}
+ inner(\boldsymbol{a},\boldsymbol{b}) = -|\boldsymbol{a}||\boldsymbol{b}|
+\end{eqnarray*} 
+<p>
+となる。
+</p>
+
+<p>
+また、 \(\boldsymbol{a}と\boldsymbol{b}\) のなす角が
+\(-\dfrac{\pi}{2} < \theta < \dfrac{\pi}{2}\) のとき、
+つまり、\(\boldsymbol{a}と\boldsymbol{b}\) の同じ方向を向いている成分の方が、逆方向を向いている成分より大きい時、
+</p>
+\begin{eqnarray*}
+ inner(\boldsymbol{a},\boldsymbol{b}) > 0
+\end{eqnarray*}
+<p>
+となり、
+\(\boldsymbol{a}と\boldsymbol{b}\) のなす角が
+\(\dfrac{\pi}{2} < \theta < \dfrac{3\pi}{2}\) のとき、
+つまり、 \(\boldsymbol{a}と\boldsymbol{b}\) の逆方向を向いている成分の方が、同方向を向いている成分より大きい時、
+</p>
+\begin{eqnarray*}
+ inner(\boldsymbol{a},\boldsymbol{b}) < 0
+\end{eqnarray*}
+<p>
+となり、二つのベクトルの内積の正負を調べることで向いている方向の関係を調べることができます。
+</p>
+
+<p>
+また、\(\boldsymbol{a}, \boldsymbol{b}\) の成分がそれぞれ、
+\(\boldsymbol{a}=(a_1, a_2),  \boldsymbol{b} = (b_1, b_2)\) で
+与えられているとき, これらの内積は
+</p>
+ \begin{eqnarray*}
+inner(\boldsymbol{a},\boldsymbol{b})  = a_1b_1 + a_2b_2
+\end{eqnarray*} 
+
+<p>
+と計算できるのでした。プログラムではこの式を使います。
+</p>
+
+
+<p>
+手順をまとめると：
+</p>
+<ul class="org-ul">
+<li>(1) ブロック1とブロック2の位置 x[0], x[1]から前方ベクトル vec = x[0]-x[1]を計算</li>
+<li>(2) 前方ベクトル vec と速度ベクトル v の内積 inner(vec, v) を計算.</li>
+<li>(3) inner(vec,v) &gt; 0 なら 摩擦係数を小さく、&lt; 0 なら大きくする。</li>
+</ul>
+</div>
+
+<div id="outline-container-org80582b5" class="outline-3">
+<h3 id="org80582b5">vStep5のプログラム</h3>
+<div class="outline-text-3" id="text-org80582b5">
+<p>
+プログラム (vStep4a からの追加／変更点のみ）
+</p>
+
+<pre class="example">
+
+// (変更なし)
+
+// 摩擦係数 
+//double mu =0.05;             (削除)
+double mu_small = 0.1;         (追加)
+double mu_large = mu_small*50; (追加)
+double [] mu = new float[2];   (追加)
+DVector vec = new DVector(0, 0); // 一時的に計算したベクトルを格納する為に使う (追加)
+
+// (変更なし)
+
+void setup() {
+
+ // (変更なし)
+
+}
+
+void draw() {
+  background(200);
+
+  // 力の更新
+
+  for (int i=0; i&lt;2; i++) {
+    // 摩擦係数の更新 (追加)
+    // (1) ブロック1とブロック2の位置 x[0], x[1]から前方ベクトル vec = x[0]-x[1]を計算
+    vec.x = x[0].x -x[1].x;
+    vec.y = x[0].y -x[1].y;
+
+    // (2) 前方ベクトル vec と速度ベクトル vv の内積 inner(vec, vv) を計算.
+    double inner = vec.x * v[i].x  + vec.y * v[i].y;
+    // (3) inner(vec,vv) &gt; 0 なら 摩擦係数を小さく、&lt; 0 なら大きくする。
+    if ( inner &gt; 0 )
+      mu[i] = mu_small;
+    else
+      mu[i] = mu_large;
+
+    // 力の更新 （修正）
+    if ( i==0 ) {
+      //
+      double dist = Math.sqrt(Math.pow(x[1].x-x[0].x, 2.0) + Math.pow(x[1].y-x[0].y, 2.0));
+      e.x = (x[1].x - x[0].x)/dist;
+      e.y = (x[1].y - x[0].y)/dist;
+
+      F[0].x = K*(dist - L) * e.x - mu[i]*v[0].x; // (変更)
+      F[0].y = K*(dist - L) * e.y - mu[i]*v[0].y; // (変更)
+    } else {
+
+      double dist = Math.sqrt(Math.pow(x[0].x-x[1].x, 2.0) + Math.pow(x[0].y-x[1].y, 2.0));
+      e.x = (x[0].x - x[1].x)/dist;
+      e.y = (x[0].y - x[1].y)/dist;
+
+      F[1].x = K*(dist - L) * e.x - mu[i]*v[1].x; // (変更)
+      F[1].y = K*(dist - L) * e.y - mu[i]*v[1].y; // (変更)
+    }
+  }
+
+ // 以下変更なし
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5a7e252" class="outline-2">
+<h2 id="org5a7e252">vStep.6 ブロックの数を増やす.</h2>
+<div class="outline-text-2" id="text-org5a7e252">
+<ul class="org-ul">
+<li>ミミズのモデル.</li>
+</ul>
+
+<p>
+ここは、1次元の場合にミミズモデルを作ったのと方針は同じ。やってみよう。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org853c58d" class="outline-2">
+<h2 id="org853c58d">vStep.7 モデルを発展させる</h2>
+<div class="outline-text-2" id="text-org853c58d">
+<p>
+以上のモデルを基本に複数の方向にモデルを発展させることができる.
+たとえば，
+</p>
+</div>
+
+
+<div id="outline-container-orgca96bf0" class="outline-3">
+<h3 id="orgca96bf0">その1 ブロックの列を２列にして，列の間をうまくつなぐ.</h3>
+<div class="outline-text-3" id="text-orgca96bf0">
+<ul class="org-ul">
+<li>ヘビなどのアンデュレーションを使った這行モデルへの展開</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org4dfdd5a" class="outline-3">
+<h3 id="org4dfdd5a">その2 足をつける</h3>
+<div class="outline-text-3" id="text-org4dfdd5a">
+<ul class="org-ul">
+<li>ムカデのモデル</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: kuroda</p>
+<p class="date">Created: 2022-11-24 木 16:40</p>
+</div>
+</body>
+</html>
